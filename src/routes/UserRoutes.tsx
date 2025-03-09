@@ -1,9 +1,11 @@
+import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 import { Route, Routes } from "react-router";
 
 
 const UserRouteArray = [
-    { path: "signup", component: Signup }
+    { path: "signup", component: Signup },
+    { path: "login", component: Login },
 ]
 
 const UserRoutes = () => {
