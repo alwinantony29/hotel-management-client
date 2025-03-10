@@ -1,10 +1,13 @@
 import "./App.css";
-import UserRoutes from "./routes/UserRoutes";
+import Routes from "./Routes";
 
 function App() {
+  const pages = import.meta.glob("./pages/**/!(*.test.[jt]sx)*.([jt]sx)", {
+    eager: true,
+  });
   return (
     <>
-        <UserRoutes />
+      <Routes pages={pages} />
     </>
   );
 }
