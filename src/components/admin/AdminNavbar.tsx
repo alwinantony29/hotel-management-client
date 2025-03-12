@@ -24,13 +24,13 @@ const AdminNavbar = () => {
         <div className="flex items-center space-x-8">
           <div className="flex space-x-6">
             <button 
-              className={`py-2 px-1 border-b-2 ${activeRoute === 'rooms' ? 'border-blue-500 text-blue-400' : 'border-transparent hover:text-gray-300'}`}
+              className={`cursor-pointer py-2 px-1 border-b-2 ${activeRoute === 'rooms' ? 'border-blue-500 text-blue-400' : 'border-transparent hover:text-gray-300'}`}
               onClick={() => navigate('/admin/rooms')}
             >
               Rooms
             </button>
             <button 
-              className={`py-2 px-1 border-b-2 ${activeRoute === 'drivers' ? 'border-blue-500 text-blue-400' : 'border-transparent hover:text-gray-300'}`}
+              className={`cursor-pointer py-2 px-1 border-b-2 ${activeRoute === 'drivers' ? 'border-blue-500 text-blue-400' : 'border-transparent hover:text-gray-300'}`}
               onClick={() => navigate('/admin/drivers')}
             >
               Drivers
