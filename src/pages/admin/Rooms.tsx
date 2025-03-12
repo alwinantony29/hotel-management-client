@@ -3,9 +3,9 @@ import AdminLayout from "@/layouts/AdminLayout"
 const Rooms = () => {
     return (
         <>
-        <AdminLayout>
-            hii
-        </AdminLayout>
+            <AdminLayout>
+                hii
+            </AdminLayout>
         </>
     )
 }
