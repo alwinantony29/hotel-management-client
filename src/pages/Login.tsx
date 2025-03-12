@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { api } from "@/lib/axios";
 
 const Login = () => {
   const [form, setForm] = useState({
@@ -15,10 +16,12 @@ const Login = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login data:", form);
-    // Handle login logic
+    const res = await api.post("auth/login", form);
+    if (res?.data?.token) localStorage.setItem("token", res.data.token);
+
+    console.log("🚀 ~ handleSubmit ~ res:", res.data);
   };
 
   return (
@@ -29,7 +32,7 @@ const Login = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+            <div className="flex flex-col gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -41,7 +44,7 @@ const Login = () => {
                 onChange={handleChange}
               />
             </div>
-            <div>
+            <div className="flex flex-col gap-2">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"

@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { api } from "@/lib/axios";
 
 const Signup = () => {
   const [form, setForm] = useState({
+    name: "",
     email: "",
     password: "",
   });
@@ -15,10 +17,11 @@ const Signup = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Signup data:", form);
-    // Handle signup logic
+    const res = await api.post("/auth/signup", form);
+    console.log("🚀 ~ handleSubmit ~ res:", res.data);
+    if (res?.data?.token) localStorage.setItem("token", res.data.token);
   };
 
   return (
@@ -29,7 +32,19 @@ const Signup = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                name="name"
+                type="name"
+                placeholder="Enter your name"
+                required
+                value={form.name}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
@@ -41,7 +56,7 @@ const Signup = () => {
                 onChange={handleChange}
               />
             </div>
-            <div>
+            <div className="flex flex-col gap-2">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
