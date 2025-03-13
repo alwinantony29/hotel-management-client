@@ -1,13 +1,20 @@
-import { useUser } from "@/store/useUser";
+import BookingForm from "@/components/BookingForm";
+import { Gallery } from "@/components/Gallery";
+import { Hero } from "@/components/Hero";
+import HotelDetails from "@/components/HotelDetails";
+import { Reviews } from "@/components/Reviews";
+import { RoomDetails } from "@/components/RoomDetails";
 
 // src/pages/index.tsx
 export default function Home() {
-  const { user } = useUser();
-  console.log("🚀 ~ Home ~ user:", user);
   return (
-    <div>
-      <h1>Welcome to the Homepage</h1>
-      <p>This is the root page of the app.</p>
+    <div className="min-h-screen bg-white">
+      <Hero />
+      <HotelDetails />
+      <RoomDetails />
+      <Gallery />
+      <Reviews />
+      <BookingForm />
     </div>
   );
 }
