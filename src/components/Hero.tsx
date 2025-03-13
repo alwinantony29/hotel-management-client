@@ -11,7 +11,7 @@ export const Hero: React.FC = () => {
             "url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')",
         }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        <div className="absolute inset-0 bg-black opacity-40"></div>
       </div>
 
       <div className="relative h-full flex flex-col items-center justify-center text-white px-4">
@@ -21,9 +21,12 @@ export const Hero: React.FC = () => {
         <p className="text-xl md:text-2xl mb-8 text-center max-w-2xl">
           Experience luxury redefined in the heart of paradise
         </p>
-        <button className="bg-white text-gray-900 px-8 py-3 rounded-full text-lg font-semibold hover:bg-opacity-90 transition-all">
+        <a
+          href="#book"
+          className="bg-white text-gray-900 px-8 py-3 rounded-full text-lg font-semibold hover:bg-opacity-90 transition-all"
+        >
           Book Your Stay
-        </button>
+        </a>
 
         <div className="absolute bottom-8 animate-bounce">
           <ChevronDown size={32} />

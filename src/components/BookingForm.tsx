@@ -37,7 +37,7 @@ const BookingForm = () => {
   const [checkInDate, setCheckInDate] = useState<Date>();
   const [checkOutDate, setCheckOutDate] = useState<Date>();
   return (
-    <section className="py-20 px-4 md:px-8">
+    <section className="py-20 px-4 md:px-8" id="book">
       <div className="max-w-2xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-16">Book Your Stay</h2>
         <Card>
