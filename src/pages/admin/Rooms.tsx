@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import AdminLayout from "@/layouts/AdminLayout";
 import { api } from "@/lib/axios";
+import { getRoomStatusColor, getRoomTypeLabel } from "@/lib/utils";
 import AddEditRoomModal from "@/modals/AddEditRoomModal";
 import DeleteRoomModal from "@/modals/DeleteRoomModal";
 import { Room } from "@/types";
@@ -54,32 +55,6 @@ const RoomsPage = () => {
     setDeleteRoomId(id);
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "available":
-        return "bg-green-100 text-green-800";
-      case "booked":
-        return "bg-red-100 text-red-800";
-      case "cleaning":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getRoomTypeLabel = (type: string) => {
-    switch (type) {
-      case "deluxe":
-        return "Deluxe";
-      case "premium":
-        return "Premium";
-      case "ultra luxury":
-        return "Ultra Luxury";
-      default:
-        return type;
-    }
-  };
-
   return (
     <AdminLayout>
       <div className="p-6">
@@ -117,7 +92,7 @@ const RoomsPage = () => {
                     <TableCell>{getRoomTypeLabel(room.type)}</TableCell>
                     <TableCell>{room.capacity} Person(s)</TableCell>
                     <TableCell>
-                      <Badge className={getStatusColor(room.status)}>
+                      <Badge className={getRoomStatusColor(room.status)}>
                         {room.status.charAt(0).toUpperCase() +
                           room.status.slice(1)}
                       </Badge>
