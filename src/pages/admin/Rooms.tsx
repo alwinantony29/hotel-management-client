@@ -25,11 +25,8 @@ const fetchRooms = async () => {
 
 const RoomsPage = () => {
   const [open, setOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [editRoomData, setEditRoomData] = useState<Room | undefined>(undefined);
-  const [deleteRoomId, setDeleteRoomId] = useState<string | undefined>(
-    undefined
-  );
+  const [deleteRoomId, setDeleteRoomId] = useState<string | null>(null);
 
   const {
     data: rooms = [],
@@ -49,17 +46,12 @@ const RoomsPage = () => {
   };
 
   const handleEditRoom = (data: Room) => {
-    console.log("Edit room", data);
     setEditRoomData(data);
-
     setOpen(true);
-    // Would normally open a modal or navigate to edit room form
   };
 
   const handleDeleteRoom = (id: string) => {
-    console.log("Delete room", id);
     setDeleteRoomId(id);
-    setDeleteModalOpen(true);
   };
 
   const getStatusColor = (status: string) => {
@@ -171,11 +163,9 @@ const RoomsPage = () => {
       <AddEditRoomModal open={open} setOpen={setOpen} roomData={editRoomData} />
 
       {/* Delete Room Modal */}
-      <DeleteRoomModal
-        open={deleteModalOpen}
-        setOpen={setDeleteModalOpen}
-        roomId={deleteRoomId}
-      />
+      {deleteRoomId && (
+        <DeleteRoomModal roomId={deleteRoomId} setRoomId={setDeleteRoomId} />
+      )}
     </AdminLayout>
   );
 };

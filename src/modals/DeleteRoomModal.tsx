@@ -7,43 +7,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { api } from "@/lib/axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Dispatch, SetStateAction } from "react";
+import { useRoomMutations } from "@/hooks/useRoomMutation";
 
 type DeleteRoomModalProps = {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  roomId?: string;
+  roomId: string;
+  setRoomId: (v: string | null) => void;
 };
 
 const DeleteRoomModal: React.FC<DeleteRoomModalProps> = ({
-  open,
-  setOpen,
   roomId,
+  setRoomId,
 }) => {
-  const queryClient = useQueryClient();
-
-  const deleteRoomMutation = useMutation({
-    mutationFn: async () => {
-      if (!roomId) return;
-      await api.delete(`/rooms/${roomId}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["rooms"] });
-      setOpen(false);
-    },
-    onError: (error) => {
-      console.error("Error deleting room:", error);
-    },
-  });
-
+  const { deleteRoomMutation } = useRoomMutations();
   const handleDelete = () => {
-    deleteRoomMutation.mutate();
+    deleteRoomMutation.mutateAsync(roomId).then(() => {
+      setRoomId(null);
+    });
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={!!roomId} onOpenChange={() => setRoomId(null)}>
       <DialogContent className="w-full max-w-md">
         <DialogDescription></DialogDescription>
         <DialogHeader>
@@ -56,7 +39,7 @@ const DeleteRoomModal: React.FC<DeleteRoomModalProps> = ({
           </p>
         </div>
         <DialogFooter className="border-t p-4 flex justify-end space-x-2">
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button variant="outline" onClick={() => setRoomId(null)}>
             Cancel
           </Button>
           <Button

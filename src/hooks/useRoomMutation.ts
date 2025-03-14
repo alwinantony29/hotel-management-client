@@ -30,5 +30,17 @@ export const useRoomMutations = () => {
       console.error("Error editing room:", error);
     },
   });
-  return { addRoomMutation, editRoomMutation };
+
+  const deleteRoomMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await api.delete(`/rooms/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["rooms"] });
+    },
+    onError: (error) => {
+      console.error("Error deleting room:", error);
+    },
+  });
+  return { addRoomMutation, editRoomMutation, deleteRoomMutation };
 };
