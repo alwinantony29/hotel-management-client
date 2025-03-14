@@ -51,10 +51,6 @@ const RoomsPage = () => {
     setOpen(true);
   };
 
-  const handleDeleteRoom = (id: string) => {
-    setDeleteRoomId(id);
-  };
-
   return (
     <AdminLayout>
       <div className="p-6">
@@ -121,7 +117,7 @@ const RoomsPage = () => {
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => handleDeleteRoom(room._id)}
+                          onClick={() => setDeleteRoomId(room._id)}
                         >
                           <Trash2 size={16} />
                         </Button>
