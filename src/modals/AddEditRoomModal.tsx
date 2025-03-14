@@ -17,15 +17,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { api } from "@/lib/axios";
+import { useRoomMutations } from "@/hooks/useRoomMutation";
 import { Room } from "@/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 type AddEditRoomModalProps = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  roomData?: Room | undefined;
+  roomData?: Room;
 };
 
 const AddEditRoomModal: React.FC<AddEditRoomModalProps> = ({
@@ -33,17 +32,14 @@ const AddEditRoomModal: React.FC<AddEditRoomModalProps> = ({
   setOpen,
   roomData,
 }) => {
-  const queryClient = useQueryClient();
-
   const [roomNo, setRoomNo] = useState<string>("");
-  const [type, setType] = useState<string>("deluxe");
-  const [capacity, setCapacity] = useState<number | "">("");
-  const [status, setStatus] = useState<string>("available");
+  const [type, setType] = useState<Room["type"]>("deluxe");
+  const [capacity, setCapacity] = useState(1);
+  const [status, setStatus] = useState<Room["status"]>("available");
   const [images, setImages] = useState<string[]>([]);
   const [description, setDescription] = useState<string[]>([]);
-  const [price, setPrice] = useState<number | "">("");
+  const [price, setPrice] = useState(0);
 
-  // Populate states when roomData is available
   useEffect(() => {
     if (roomData) {
       setRoomNo(roomData.roomNo);
@@ -53,69 +49,30 @@ const AddEditRoomModal: React.FC<AddEditRoomModalProps> = ({
       setImages(roomData.images);
       setDescription(roomData.description);
       setPrice(roomData.price);
-    } else {
-      setRoomNo("");
-      setType("deluxe");
-      setCapacity("");
-      setStatus("available");
-      setImages([]);
-      setDescription([]);
-      setPrice("");
     }
   }, [roomData, open]);
 
-  // Mutation for adding a room
-  const addRoomMutation = useMutation({
-    mutationFn: async () => {
-      const res = await api.post("/rooms", {
-        roomNo,
-        type,
-        capacity,
-        status,
-        images,
-        description,
-        price,
-      });
-      return res.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["rooms"] });
-      setOpen(false);
-    },
-    onError: (error) => {
-      console.error("Error adding room:", error);
-    },
-  });
+  const { addRoomMutation, editRoomMutation } = useRoomMutations();
 
-  // Mutation for updating a room
-  const editRoomMutation = useMutation({
-    mutationFn: async () => {
-      const res = await api.put(`/rooms/${roomData?._id}`, {
-        roomNo,
-        type,
-        capacity,
-        status,
-        images,
-        description,
-        price,
-      });
-      return res.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["rooms"] });
-      setOpen(false);
-    },
-    onError: (error) => {
-      console.error("Error editing room:", error);
-    },
-  });
+  const newRoomData = {
+    capacity,
+    description,
+    images,
+    price,
+    roomNo,
+    status,
+    type,
+  };
 
   const handleSaveRoom = () => {
-    addRoomMutation.mutate();
+    addRoomMutation.mutateAsync(newRoomData).then(() => setOpen(false));
   };
 
   const handleEditRoom = () => {
-    editRoomMutation.mutate();
+    if (!roomData) return;
+    editRoomMutation
+      .mutateAsync({ _id: roomData._id, ...newRoomData })
+      .then(() => setOpen(false));
   };
 
   return (
@@ -132,7 +89,10 @@ const AddEditRoomModal: React.FC<AddEditRoomModalProps> = ({
           </div>
           <div>
             <Label className="my-1 block">Type</Label>
-            <Select value={type} onValueChange={setType}>
+            <Select
+              value={type}
+              onValueChange={(v) => setType(v as Room["type"])}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Type" />
               </SelectTrigger>
@@ -149,13 +109,16 @@ const AddEditRoomModal: React.FC<AddEditRoomModalProps> = ({
               type="number"
               value={capacity}
               onChange={(e) =>
-                setCapacity(e.target.value ? parseInt(e.target.value, 10) : "")
+                setCapacity(e.target.value ? parseInt(e.target.value, 10) : 1)
               }
             />
           </div>
           <div>
             <Label className="my-1 block">Status</Label>
-            <Select value={status} onValueChange={setStatus}>
+            <Select
+              value={status}
+              onValueChange={(v) => setStatus(v as Room["status"])}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Status" />
               </SelectTrigger>
@@ -192,7 +155,7 @@ const AddEditRoomModal: React.FC<AddEditRoomModalProps> = ({
               type="number"
               value={price}
               onChange={(e) =>
-                setPrice(e.target.value ? parseFloat(e.target.value) : "")
+                setPrice(e.target.value ? parseFloat(e.target.value) : 0)
               }
             />
           </div>
