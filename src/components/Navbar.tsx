@@ -29,7 +29,7 @@ export default function Navbar() {
             scrolled ? "text-black" : "text-white"
           )}
         >
-          Logo
+          Grand Azure
         </h1>
         <ul className="flex space-x-6">
           {["Home", "About", "Services", "Contact"].map((item) => (

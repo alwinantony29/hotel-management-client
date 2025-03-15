@@ -9,34 +9,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useRooms } from "@/hooks/useRoomQuery";
 import AdminLayout from "@/layouts/AdminLayout";
-import { api } from "@/lib/axios";
 import { getRoomStatusColor, getRoomTypeLabel } from "@/lib/utils";
 import AddEditRoomModal from "@/modals/AddEditRoomModal";
 import DeleteRoomModal from "@/modals/DeleteRoomModal";
 import { Room } from "@/types";
-import { useQuery } from "@tanstack/react-query";
 import { Edit, Image, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
-
-const fetchRooms = async () => {
-  const res = await api.get("/rooms");
-  return res?.data || [];
-};
 
 const RoomsPage = () => {
   const [open, setOpen] = useState(false);
   const [editRoomData, setEditRoomData] = useState<Room | undefined>(undefined);
   const [deleteRoomId, setDeleteRoomId] = useState<string | null>(null);
 
-  const {
-    data: rooms = [],
-    isLoading,
-    isError,
-  } = useQuery<Room[]>({
-    queryKey: ["rooms"],
-    queryFn: fetchRooms,
-  });
+  const { data: rooms, isLoading, isError } = useRooms();
 
   if (isLoading) return <p>Loading rooms...</p>;
   if (isError) return <p>Failed to load rooms.</p>;
@@ -82,7 +69,7 @@ const RoomsPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {rooms.map((room) => (
+                {rooms?.map((room) => (
                   <TableRow key={room._id}>
                     <TableCell className="font-medium">{room.roomNo}</TableCell>
                     <TableCell>{getRoomTypeLabel(room.type)}</TableCell>

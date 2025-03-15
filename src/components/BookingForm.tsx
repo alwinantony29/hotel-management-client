@@ -3,7 +3,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Calendar } from "./ui/calendar";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -11,31 +11,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-
-const rooms = [
-  {
-    type: "Deluxe Suite",
-    price: 299,
-    image: "https://images.unsplash.com/photo-1590490360182-c33d57733427",
-    description: "Spacious suite with city views and premium amenities",
-  },
-  {
-    type: "Executive Room",
-    price: 199,
-    image: "https://images.unsplash.com/photo-1591088398332-8a7791972843",
-    description: "Modern comfort with a work area and king-size bed",
-  },
-  {
-    type: "Premium Suite",
-    price: 399,
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b",
-    description: "Luxury suite with separate living area and panoramic views",
-  },
-];
+import { useRoomBookingMutation } from "@/hooks/useRoomBookingMutation";
+import { useRooms } from "@/hooks/useRoomQuery";
+import { Room } from "@/types";
 
 const BookingForm = () => {
-  const [checkInDate, setCheckInDate] = useState<Date>();
-  const [checkOutDate, setCheckOutDate] = useState<Date>();
+  const [checkInDate, setCheckInDate] = useState(new Date());
+  const [checkOutDate, setCheckOutDate] = useState(new Date());
+  const [totalPeople, setTotalPeople] = useState(1);
+  const [selectedRoom, setSelectedRoom] = useState<Room>();
+
+  const { createRoomBookingMutation } = useRoomBookingMutation();
+  const { data: rooms } = useRooms();
+
+  const handleProceedToPayment = async () => {
+    if (!selectedRoom) return;
+    await createRoomBookingMutation.mutateAsync({
+      from: checkInDate,
+      to: checkOutDate,
+      roomId: selectedRoom?._id,
+      totalPeople,
+      isPaid: false,
+      status: "confirmed",
+    });
+    // navigate to payment gateway or do something else
+  };
+  const roomTypes = useMemo(() => {
+    if (!rooms) return {};
+    const roomTypeData: Record<string, Room> = {};
+    for (const room of rooms) {
+      if (roomTypeData[room.type]) continue;
+      roomTypeData[room.type] = room;
+    }
+    return roomTypeData;
+  }, [rooms]);
+
   return (
     <section className="py-20 px-4 md:px-8" id="book">
       <div className="max-w-2xl mx-auto">
@@ -48,7 +58,7 @@ const BookingForm = () => {
                 <Calendar
                   mode="single"
                   selected={checkInDate}
-                  onSelect={setCheckInDate}
+                  onSelect={(v) => (v ? setCheckInDate(v) : {})}
                   className="rounded-md border flex justify-center"
                 />
               </div>
@@ -57,7 +67,7 @@ const BookingForm = () => {
                 <Calendar
                   mode="single"
                   selected={checkOutDate}
-                  onSelect={setCheckOutDate}
+                  onSelect={(v) => (v ? setCheckOutDate(v) : {})}
                   className="rounded-md border flex justify-center "
                 />
               </div>
@@ -65,13 +75,18 @@ const BookingForm = () => {
             <div className="grid md:grid-cols-2 gap-6 mt-6">
               <div className="space-y-2">
                 <Label>Room Type</Label>
-                <Select>
+                <Select
+                  onValueChange={(v) => {
+                    const selectedRoom = roomTypes[v];
+                    setSelectedRoom(selectedRoom);
+                  }}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select room type" />
                   </SelectTrigger>
                   <SelectContent>
-                    {rooms.map((room, index) => (
-                      <SelectItem key={index} value={room.type.toLowerCase()}>
+                    {Object.values(roomTypes)?.map((room, index) => (
+                      <SelectItem key={index} value={room.type}>
                         {room.type}
                       </SelectItem>
                     ))}
@@ -80,12 +95,12 @@ const BookingForm = () => {
               </div>
               <div className="space-y-2">
                 <Label>Number of Guests</Label>
-                <Select>
+                <Select onValueChange={(v) => setTotalPeople(+v)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select guests" />
                   </SelectTrigger>
                   <SelectContent>
-                    {[1, 2, 3, 4].map((num) => (
+                    {[...Array(selectedRoom?.capacity).keys()].map((num) => (
                       <SelectItem key={num} value={num.toString()}>
                         {num} {num === 1 ? "Guest" : "Guests"}
                       </SelectItem>
@@ -98,7 +113,9 @@ const BookingForm = () => {
               <Label>Special Requests</Label>
               <Input placeholder="Any special requirements?" />
             </div>
-            <Button className="w-full mt-6">Proceed to Payment</Button>
+            <Button className="w-full mt-6" onClick={handleProceedToPayment}>
+              Proceed to Payment
+            </Button>
           </CardContent>
         </Card>
       </div>
