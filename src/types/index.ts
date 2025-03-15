@@ -15,3 +15,13 @@ export type Room = {
   description: string[];
   price: number;
 };
+
+export type RoomBooking = {
+  userId: string;
+  roomId: string;
+  totalPeople: number;
+  isPaid: boolean;
+  status: "confirmed" | "cancelled";
+  from: Date;
+  to: Date;
+};
