@@ -1,4 +1,5 @@
 import BookingForm from "@/components/BookingForm";
+import Footer from "@/components/Footer";
 import { Gallery } from "@/components/Gallery";
 import { Hero } from "@/components/Hero";
 import HotelDetails from "@/components/HotelDetails";
@@ -15,6 +16,7 @@ export default function Home() {
       <Gallery />
       <Reviews />
       <BookingForm />
+      <Footer />
     </div>
   );
 }
