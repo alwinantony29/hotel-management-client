@@ -17,11 +17,19 @@ export type Room = {
 };
 
 export type RoomBooking = {
+  _id: string;
   userId: string;
   roomId: string;
   totalPeople: number;
   isPaid: boolean;
   status: "confirmed" | "cancelled";
-  from: Date;
-  to: Date;
+  from: string;
+  to: string;
+  totalPrice: number;
+  paymentMethod: string;
+  createdAt: string;
+};
+
+export type PopulatedRoomBooking = Omit<RoomBooking, "roomId"> & {
+  roomId: Room;
 };

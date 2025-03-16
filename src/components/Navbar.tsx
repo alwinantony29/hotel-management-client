@@ -8,10 +8,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "./ui/button";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 export default function Navbar() {
   const { user, logout } = useUser();
+  const location = useLocation();
+  const isHomePage = location.pathname === "/";
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
 
@@ -30,13 +32,13 @@ export default function Navbar() {
       <div
         className={cn(
           "p-4 rounded-xl flex justify-between items-center transition-all duration-300  w-full",
-          scrolled ? "bg-white shadow-md" : "bg-transparent"
+          scrolled || !isHomePage ? "bg-white shadow-md" : "bg-transparent"
         )}
       >
         <h1
           className={cn(
             "text-xl font-bold",
-            scrolled ? "text-black" : "text-white"
+            scrolled || !isHomePage ? "text-black" : "text-white"
           )}
         ></h1>
         <ul className="flex space-x-6">
@@ -46,7 +48,7 @@ export default function Navbar() {
                 href={`#${item.toLowerCase()}`}
                 className={cn(
                   "text-lg font-medium transition-colors",
-                  scrolled
+                  scrolled || !isHomePage
                     ? "text-black hover:text-gray-600"
                     : "text-white hover:text-gray-300"
                 )}
@@ -86,6 +88,15 @@ export default function Navbar() {
                         onClick={logout}
                       >
                         Logout
+                      </Button>
+                    </li>
+                    <li>
+                      <Button
+                        variant="ghost"
+                        className="w-full text-left"
+                        onClick={() => navigate("/history")}
+                      >
+                        Bookings
                       </Button>
                     </li>
                   </>

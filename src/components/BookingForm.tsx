@@ -122,7 +122,11 @@ const BookingForm = () => {
               <Label>Special Requests</Label>
               <Input placeholder="Any special requirements?" />
             </div>
-            <Button className="w-full mt-6" onClick={handleProceedToPayment}>
+            <Button
+              disabled={createRoomBookingMutation.isPending}
+              className="w-full mt-6"
+              onClick={handleProceedToPayment}
+            >
               Proceed to Payment
             </Button>
           </CardContent>

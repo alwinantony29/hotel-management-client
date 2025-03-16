@@ -36,9 +36,9 @@ export const Gallery: React.FC = () => {
   };
 
   return (
-    <section className="py-20 px-4 bg-white">
+    <section className="py-14 px-4 bg-white">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold text-center mb-16">Photo Gallery</h2>
+        <h2 className="text-4xl font-bold text-center mb-10">Photo Gallery</h2>
 
         <div className="relative">
           <div className="relative h-[600px] overflow-hidden rounded-xl">
