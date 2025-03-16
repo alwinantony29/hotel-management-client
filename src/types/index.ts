@@ -23,10 +23,10 @@ export type RoomBooking = {
   totalPeople: number;
   isPaid: boolean;
   status: "confirmed" | "cancelled";
-  from: string;
-  to: string;
+  from: string | Date;
+  to: string | Date;
   totalPrice: number;
-  paymentMethod: string;
+  paymentMethod?: string;
   createdAt: string;
 };
 

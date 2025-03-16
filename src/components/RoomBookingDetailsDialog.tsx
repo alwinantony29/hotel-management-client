@@ -65,14 +65,20 @@ export default function RoomBookingDetailsDialog({
                 <CalendarRange className="w-5 h-5 text-primary" />
                 <div>
                   <p className="text-sm text-muted-foreground">Check-in</p>
-                  <p className="font-medium">{selectedBooking?.from}</p>
+                  <p className="font-medium">
+                    {selectedBooking?.from &&
+                      new Date(selectedBooking?.from).toLocaleDateString()}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <CalendarRange className="w-5 h-5 text-primary" />
                 <div>
                   <p className="text-sm text-muted-foreground">Check-out</p>
-                  <p className="font-medium">{selectedBooking?.to}</p>
+                  <p className="font-medium">
+                    {selectedBooking?.to &&
+                      new Date(selectedBooking.to).toLocaleDateString()}
+                  </p>
                 </div>
               </div>
             </div>

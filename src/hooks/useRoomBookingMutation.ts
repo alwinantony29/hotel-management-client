@@ -4,7 +4,12 @@ import { useMutation } from "@tanstack/react-query";
 
 export const useRoomBookingMutation = () => {
   const createRoomBookingMutation = useMutation({
-    mutationFn: (roomBooking: Omit<RoomBooking, "_id" | "userId">) => {
+    mutationFn: (
+      roomBooking: Omit<
+        RoomBooking,
+        "_id" | "userId" | "totalPrice" | "createdAt"
+      >
+    ) => {
       return api.post("/roombookings", roomBooking);
     },
   });
