@@ -24,7 +24,7 @@ const Login = () => {
     e.preventDefault();
     const res = await api.post("auth/login", form);
     if (res?.data?.token) localStorage.setItem("token", res.data.token);
-    await queryClient.refetchQueries({ queryKey: ["user"] });
+    await queryClient.invalidateQueries({ queryKey: ["user"] });
 
     navigate("/");
   };

@@ -1,5 +1,6 @@
 import React from "react";
 import { Users, Maximize2, Wifi } from "lucide-react";
+import { useSearchParams } from "react-router";
 
 const rooms = [
   {
@@ -8,6 +9,7 @@ const rooms = [
       "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
     price: 299,
     capacity: "2-3 Guests",
+    type: "deluxe",
     size: "45 m²",
     description: "Luxurious suite with city views and premium amenities.",
   },
@@ -17,6 +19,7 @@ const rooms = [
       "https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
     price: 199,
     capacity: "2 Guests",
+    type: "deluxe",
     size: "35 m²",
     description:
       "Modern comfort with a perfect blend of style and functionality.",
@@ -27,14 +30,17 @@ const rooms = [
       "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
     price: 499,
     capacity: "4 Guests",
+    type: "deluxe",
     size: "75 m²",
     description: "Ultimate luxury with panoramic views and exclusive services.",
   },
 ];
 
 export const RoomDetails: React.FC = () => {
+  const [, setSearchParams] = useSearchParams();
+
   return (
-    <section className="py-20 px-4 bg-gray-50">
+    <section className="py-20 px-4 bg-gray-50" id="services">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-4xl font-bold text-center mb-16">Our Rooms</h2>
 
@@ -77,7 +83,16 @@ export const RoomDetails: React.FC = () => {
                   </div>
                 </div>
 
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                <button
+                  onClick={() => {
+                    setSearchParams((prev) => {
+                      prev.set("type", room.type);
+                      return prev;
+                    });
+                    document.getElementById("book")?.scrollIntoView();
+                  }}
+                  className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                >
                   Book Now
                 </button>
               </div>

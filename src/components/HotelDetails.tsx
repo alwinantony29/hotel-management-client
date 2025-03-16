@@ -8,7 +8,7 @@ const HotelDetails = () => {
     { icon: <Pool className="w-6 h-6" />, name: "Swimming Pool" },
   ];
   return (
-    <section className="py-20 px-4 md:px-8">
+    <section className="py-20 px-4 md:px-8" id="about">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold text-center mb-16">
           Experience Luxury at Its Finest

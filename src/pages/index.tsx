@@ -5,9 +5,11 @@ import { Hero } from "@/components/Hero";
 import HotelDetails from "@/components/HotelDetails";
 import { Reviews } from "@/components/Reviews";
 import { RoomDetails } from "@/components/RoomDetails";
+import { useUser } from "@/store/useUser";
 
-// src/pages/index.tsx
 export default function Home() {
+  const { user } = useUser();
+
   return (
     <div className="min-h-screen bg-white">
       <Hero />
@@ -15,7 +17,7 @@ export default function Home() {
       <RoomDetails />
       <Gallery />
       <Reviews />
-      <BookingForm />
+      {user && <BookingForm />}
       <Footer />
     </div>
   );

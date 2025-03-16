@@ -8,7 +8,7 @@ export const Hero: React.FC = () => {
   const { user } = useUser();
   const navigate = useNavigate();
   return (
-    <div className="relative h-screen">
+    <div className="relative h-screen" id="home">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
