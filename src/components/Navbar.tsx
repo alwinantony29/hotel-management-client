@@ -27,6 +27,17 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const navigateAndScrollIntoView = (link: string) => {
+    if (!isHomePage) {
+      navigate("/");
+      setTimeout(() => {
+        document.getElementById(link.toLowerCase())?.scrollIntoView();
+      }, 200);
+      return;
+    }
+    document.getElementById(link.toLowerCase())?.scrollIntoView();
+  };
+
   return (
     <nav className={"fixed top-0 left-0 right-0 w-full z-50 p-3"}>
       <div
@@ -45,7 +56,7 @@ export default function Navbar() {
           {["Home", "About", "Services"].map((item) => (
             <li key={item}>
               <a
-                href={`#${item.toLowerCase()}`}
+                onClick={() => navigateAndScrollIntoView(item)}
                 className={cn(
                   "text-lg font-medium transition-colors",
                   scrolled || !isHomePage
