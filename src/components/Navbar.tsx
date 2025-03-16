@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { useUser } from "@/store/useUser";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "./ui/button";
+import { useNavigate } from "react-router";
 
 export default function Navbar() {
+  const { user, logout } = useUser();
+  const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -28,11 +38,9 @@ export default function Navbar() {
             "text-xl font-bold",
             scrolled ? "text-black" : "text-white"
           )}
-        >
-          Grand Azure
-        </h1>
+        ></h1>
         <ul className="flex space-x-6">
-          {["Home", "About", "Services", "Contact"].map((item) => (
+          {["Home", "About", "Services"].map((item) => (
             <li key={item}>
               <a
                 href={`#${item.toLowerCase()}`}
@@ -47,14 +55,55 @@ export default function Navbar() {
               </a>
             </li>
           ))}
+          <Popover>
+            <PopoverTrigger>
+              {user ? (
+                <Avatar>
+                  <AvatarImage
+                    src="https://github.com/shadcn.png"
+                    alt="@shadcn"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              ) : (
+                <Avatar>
+                  <AvatarImage
+                    src="https://github.com/shadcn.png"
+                    alt="@shadcn"
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              )}
+            </PopoverTrigger>
+            <PopoverContent className="w-30 p-2 relative right-7 top-2">
+              <ul className="flex flex-col space-y-2">
+                {user ? (
+                  <>
+                    <li>
+                      <Button
+                        variant="ghost"
+                        className="w-full text-left"
+                        onClick={logout}
+                      >
+                        Logout
+                      </Button>
+                    </li>
+                  </>
+                ) : (
+                  <li>
+                    <Button
+                      variant="ghost"
+                      className="w-full text-left"
+                      onClick={() => navigate("/login")}
+                    >
+                      Login
+                    </Button>
+                  </li>
+                )}
+              </ul>
+            </PopoverContent>
+          </Popover>
         </ul>
-        <Button
-          className={cn(
-            scrolled ? "bg-black text-white" : "bg-white text-black"
-          )}
-        >
-          Get Started
-        </Button>
       </div>
     </nav>
   );

@@ -1,7 +1,12 @@
 import React from "react";
 import { ChevronDown } from "lucide-react";
+import { useUser } from "@/store/useUser";
+import { Button } from "./ui/button";
+import { useNavigate } from "react-router";
 
 export const Hero: React.FC = () => {
+  const { user } = useUser();
+  const navigate = useNavigate();
   return (
     <div className="relative h-screen">
       <div
@@ -21,12 +26,21 @@ export const Hero: React.FC = () => {
         <p className="text-xl md:text-2xl mb-8 text-center max-w-2xl">
           Experience luxury redefined in the heart of paradise
         </p>
-        <a
-          href="#book"
-          className="bg-white text-gray-900 px-8 py-3 rounded-full text-lg font-semibold hover:bg-opacity-90 transition-all"
-        >
-          Book Your Stay
-        </a>
+        {user ? (
+          <a
+            href="#book"
+            className="bg-white text-gray-900 px-8 py-3 rounded-full text-lg font-semibold hover:bg-opacity-90 transition-all"
+          >
+            Book Your Stay
+          </a>
+        ) : (
+          <Button
+            onClick={() => navigate("/login")}
+            className="bg-white text-gray-900 p-5 py-6 rounded-full text-lg font-semibold hover:bg-opacity-90 transition-all"
+          >
+            Get Started
+          </Button>
+        )}
 
         <div className="absolute bottom-8 animate-bounce">
           <ChevronDown size={32} />

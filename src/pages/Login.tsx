@@ -1,12 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { api } from "@/lib/axios";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -20,8 +24,9 @@ const Login = () => {
     e.preventDefault();
     const res = await api.post("auth/login", form);
     if (res?.data?.token) localStorage.setItem("token", res.data.token);
+    await queryClient.refetchQueries({ queryKey: ["user"] });
 
-    console.log("🚀 ~ handleSubmit ~ res:", res.data);
+    navigate("/");
   };
 
   return (
