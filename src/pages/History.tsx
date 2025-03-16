@@ -1,3 +1,4 @@
+import CabBookingModal from "@/components/CabBookingModal";
 import RoomBookingDetailsDialog from "@/components/RoomBookingDetailsDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,8 +22,7 @@ const BookingHistoryPage = () => {
   const { data: allBookings } = useRoomBookingQuery();
   const [selectedBooking, setSelectedBooking] =
     useState<PopulatedRoomBooking | null>(null);
-
-  console.log("🚀 ~ BookingHistoryPage ~ allBookings:", allBookings);
+  const [showCabBookingModal, setShowCabBookingModal] = useState(false);
 
   const today = new Date();
 
@@ -34,39 +34,6 @@ const BookingHistoryPage = () => {
   const pastBookings = allBookings?.filter(
     (booking) => new Date(booking.to) < today
   );
-
-  //   const currentBookings = [
-  //     {
-  //       id: "BK001",
-  //       roomType: "Deluxe Suite",
-  //       checkIn: "2025-04-15",
-  //       checkOut: "2025-04-20",
-  //       guests: 2,
-  //       status: "Confirmed",
-  //       totalPrice: 1495,
-  //     },
-  //   ];
-
-  //   const pastBookings = [
-  //     {
-  //       id: "BK002",
-  //       roomType: "Executive Room",
-  //       checkIn: "2024-12-10",
-  //       checkOut: "2024-12-15",
-  //       guests: 1,
-  //       status: "Completed",
-  //       totalPrice: 995,
-  //     },
-  //     {
-  //       id: "BK003",
-  //       roomType: "Premium Suite",
-  //       checkIn: "2024-11-20",
-  //       checkOut: "2024-11-25",
-  //       guests: 2,
-  //       status: "Completed",
-  //       totalPrice: 1995,
-  //     },
-  //   ];
 
   return (
     <div className="min-h-screen bg-background py-30 px-4 md:px-8">
@@ -111,13 +78,22 @@ const BookingHistoryPage = () => {
                         </TableCell>
                         <TableCell>${booking.totalPrice}</TableCell>
                         <TableCell>
-                          <Button
-                            onClick={() => setSelectedBooking(booking)}
-                            variant="outline"
-                            size="sm"
-                          >
-                            View Details
-                          </Button>
+                          <div className="flex gap-5">
+                            <Button
+                              onClick={() => setSelectedBooking(booking)}
+                              variant="outline"
+                              size="sm"
+                            >
+                              View Details
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              onClick={() => setShowCabBookingModal(true)}
+                            >
+                              Book a Cab
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -170,6 +146,10 @@ const BookingHistoryPage = () => {
       <RoomBookingDetailsDialog
         selectedBooking={selectedBooking}
         onClose={() => setSelectedBooking(null)}
+      />
+      <CabBookingModal
+        isOpen={showCabBookingModal}
+        close={() => setShowCabBookingModal(false)}
       />
     </div>
   );

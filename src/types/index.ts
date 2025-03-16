@@ -33,3 +33,13 @@ export type RoomBooking = {
 export type PopulatedRoomBooking = Omit<RoomBooking, "roomId"> & {
   roomId: Room;
 };
+
+export type CabBooking = {
+  _id: string;
+  userId: string;
+  driverId: string;
+  pickUpAddress: string;
+  date: Date;
+  status: string;
+  fare: number;
+};
