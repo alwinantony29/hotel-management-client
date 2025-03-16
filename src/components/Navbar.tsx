@@ -96,18 +96,18 @@ export default function Navbar() {
                       <Button
                         variant="ghost"
                         className="w-full text-left"
-                        onClick={logout}
+                        onClick={() => navigate("/history")}
                       >
-                        Logout
+                        Bookings
                       </Button>
                     </li>
                     <li>
                       <Button
                         variant="ghost"
                         className="w-full text-left"
-                        onClick={() => navigate("/history")}
+                        onClick={logout}
                       >
-                        Bookings
+                        Logout
                       </Button>
                     </li>
                   </>
