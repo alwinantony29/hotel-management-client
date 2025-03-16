@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "./ui/button";
 import { useLocation, useNavigate } from "react-router";
+import { CalendarCheck, LogOut } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout } = useUser();
@@ -88,7 +89,7 @@ export default function Navbar() {
                 </Avatar>
               )}
             </PopoverTrigger>
-            <PopoverContent className="w-30 p-2 relative right-7 top-2">
+            <PopoverContent className="w-40 p-2 relative right-7 top-2">
               <ul className="flex flex-col space-y-2">
                 {user ? (
                   <>
@@ -98,7 +99,8 @@ export default function Navbar() {
                         className="w-full text-left"
                         onClick={() => navigate("/history")}
                       >
-                        Bookings
+                        <CalendarCheck className="w-5 h-5 mr-2" />
+                        My Bookings
                       </Button>
                     </li>
                     <li>
@@ -107,7 +109,10 @@ export default function Navbar() {
                         className="w-full text-left"
                         onClick={logout}
                       >
-                        Logout
+                        <div className="flex w-full justify-start gap-1">
+                          <LogOut className="w-5 h-5 mr-2" />
+                          Logout
+                        </div>
                       </Button>
                     </li>
                   </>
