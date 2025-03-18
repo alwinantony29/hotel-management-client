@@ -12,6 +12,9 @@ export const useDriverMutations = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["drivers"] });
     },
+    onError: (error) => {
+      console.error("Error adding room:", error);
+    },
   });
 
   const editDriverMutation = useMutation({
@@ -22,6 +25,9 @@ export const useDriverMutations = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["drivers"] });
     },
+    onError: (error) => {
+      console.error("Error adding room:", error);
+    },
   });
 
   const deleteDriverMutation = useMutation({
@@ -31,6 +37,9 @@ export const useDriverMutations = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["drivers"] });
+    },
+    onError: (error) => {
+      console.error("Error adding room:", error);
     },
   });
 
