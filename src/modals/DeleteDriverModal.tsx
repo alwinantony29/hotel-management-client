@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -26,6 +27,7 @@ const DeleteDriverModal: React.FC<DeleteDriverModalProps> = ({ driverId, setDriv
   return (
     <Dialog open={!!driverId} onOpenChange={() => setDriverId(null)}>
       <DialogContent className="w-full max-w-md">
+      <DialogDescription></DialogDescription>
         <DialogHeader>
           <DialogTitle>Delete Driver</DialogTitle>
         </DialogHeader>
