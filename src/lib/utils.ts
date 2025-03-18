@@ -35,6 +35,3 @@ export const getRoomStatusColor = (status: string) => {
 export const getAccessToken = () => localStorage.getItem("token");
 export const isAuthenticated = () => !!getAccessToken();
 
-export const removeAccessToken = () => {
-  localStorage.removeItem("token");
-};
