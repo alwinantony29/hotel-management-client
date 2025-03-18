@@ -48,7 +48,7 @@ const AddEditDriverModal: React.FC<AddEditDriverModalProps> = ({
     email,
     password,
     phoneNo,
-    role: "admin" as UserRole
+    role: "driver" as UserRole
   };
 
   const handleSubmit = async () => {
