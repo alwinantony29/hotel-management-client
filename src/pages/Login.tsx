@@ -26,7 +26,9 @@ const Login = () => {
     if (res?.data?.token) localStorage.setItem("token", res.data.token);
     await queryClient.invalidateQueries({ queryKey: ["user"] });
 
-    navigate("/");
+    const redirectPath = res.data.user.role === 'customer' ? '' : res.data.user.role
+
+    navigate(`/${redirectPath}`);
   };
 
   return (

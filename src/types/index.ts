@@ -1,8 +1,11 @@
+export type UserRole = "admin" | "customer" | "driver";
+
 export type User = {
   _id: string;
   name: string;
   email: string;
   phoneNo: string;
+  role: UserRole
 };
 
 export type Room = {

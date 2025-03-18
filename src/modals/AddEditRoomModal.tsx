@@ -49,6 +49,14 @@ const AddEditRoomModal: React.FC<AddEditRoomModalProps> = ({
       setImages(roomData.images);
       setDescription(roomData.description);
       setPrice(roomData.price);
+    } else {
+      setRoomNo("");
+      setType("deluxe");
+      setCapacity(1);
+      setStatus("available");
+      setImages([]);
+      setDescription([]);
+      setPrice(0);
     }
   }, [roomData, open]);
 

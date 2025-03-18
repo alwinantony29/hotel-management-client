@@ -30,3 +30,8 @@ export const getRoomStatusColor = (status: string) => {
       return "bg-gray-100 text-gray-800";
   }
 };
+
+
+export const getAccessToken = () => localStorage.getItem("token");
+export const isAuthenticated = () => !!getAccessToken();
+
