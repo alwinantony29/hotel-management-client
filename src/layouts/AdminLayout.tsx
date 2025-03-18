@@ -9,14 +9,17 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
-    const { user } = useUser()
-    
+  const { user, isLoading } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated() || !user)  navigate("/login");
-    if(user?.role != 'admin')  navigate("/login");
-  }, [navigate, user]);
+    if (isLoading) return; // Wait for user data to load
+    if (!isAuthenticated() || !user || user.role !== "admin") {
+      navigate("/login");
+    }
+  }, [navigate, user, isLoading]);
+
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <>
