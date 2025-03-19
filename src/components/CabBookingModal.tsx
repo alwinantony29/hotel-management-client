@@ -30,12 +30,15 @@ import { useCabBookingMutation } from "@/hooks/useCabBookingMutation";
 export default function CabBookingModal({
   close,
   isOpen,
+  roomId,
 }: {
   isOpen: boolean;
   close: () => void;
+  roomId: string;
 }) {
   const [pickupDate, setPickupDate] = useState<Date>();
   const [pickupTime, setPickupTime] = useState("");
+  const [pickUpAddress, setPickUpAddress] = useState("");
   const [passengers, setPassengers] = useState("1");
   const [specialInstructions, setSpecialInstructions] = useState("");
 
@@ -45,12 +48,12 @@ export default function CabBookingModal({
     e.preventDefault();
     if (!pickupDate) return;
     // TODO: use same state for date & time
-    // TODO: add roomId
     createCabBooking.mutateAsync({
+      roomId,
       date: pickupDate,
-      status: "",
-      pickUpAddress: "",
-      fare: 100,
+      status: "pending",
+      pickUpAddress: pickUpAddress,
+      fare: 20,
     });
     close();
   };
@@ -137,6 +140,15 @@ export default function CabBookingModal({
             </Select>
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="special-instructions">Pickup Address</Label>
+            <Input
+              id="pickUpAddress"
+              placeholder="ABC Road square junction "
+              value={pickUpAddress}
+              onChange={(e) => setPickUpAddress(e.target.value)}
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="special-instructions">Special Instructions</Label>
             <Input

@@ -41,6 +41,7 @@ export type PopulatedRoomBooking = Omit<RoomBooking, "roomId"> & {
 export type CabBooking = {
   _id: string;
   userId: string;
+  roomId: string;
   driverId: string;
   pickUpAddress: string;
   date: Date;
