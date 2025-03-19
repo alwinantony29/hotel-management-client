@@ -130,11 +130,9 @@ export default function RoomBookingDetailsDialog({
 
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <div>
-                  <p className="text-sm text-muted-foreground">
-                    Payment Method
-                  </p>
+                  <p className="text-sm text-muted-foreground">Payment</p>
                   <p className="font-medium">
-                    {selectedBooking?.paymentMethod || "Not Paid"}
+                    {selectedBooking?.isPaid ? "Paid" : "Not Paid"}
                   </p>
                 </div>
                 <div>

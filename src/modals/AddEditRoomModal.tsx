@@ -108,7 +108,6 @@ const AddEditRoomModal: React.FC<AddEditRoomModalProps> = ({
                 <SelectItem value="deluxe">Deluxe</SelectItem>
                 <SelectItem value="premium">Premium</SelectItem>
                 <SelectItem value="presidential">Presidential Suite</SelectItem>
-                <SelectItem value="ultra luxury">Ultra Luxury</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -139,16 +138,16 @@ const AddEditRoomModal: React.FC<AddEditRoomModalProps> = ({
             </Select>
           </div>
           <div>
-            <Label className="my-1 block">Images (comma-separated URLs)</Label>
+            {/* <Label className="my-1 block">Images (comma-separated URLs)</Label>
             <Textarea
               value={images.join(", ")}
               onChange={(e) =>
                 setImages(e.target.value.split(",").map((img) => img.trim()))
               }
-            />
+            /> */}
           </div>
           <div>
-            <Label className="my-1 block">Description (comma-separated)</Label>
+            <Label className="my-1 block">Description</Label>
             <Textarea
               value={description.join(", ")}
               onChange={(e) =>
