@@ -14,12 +14,12 @@ const rooms = [
     description: "Luxurious suite with city views and premium amenities.",
   },
   {
-    name: "Executive Room",
+    name: "Premium Room",
     image:
       "https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
     price: 199,
     capacity: "2 Guests",
-    type: "deluxe",
+    type: "premium",
     size: "35 m²",
     description:
       "Modern comfort with a perfect blend of style and functionality.",
@@ -30,7 +30,7 @@ const rooms = [
       "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
     price: 499,
     capacity: "4 Guests",
-    type: "deluxe",
+    type: "presidential",
     size: "75 m²",
     description: "Ultimate luxury with panoramic views and exclusive services.",
   },
@@ -85,6 +85,7 @@ export const RoomDetails: React.FC = () => {
 
                 <button
                   onClick={() => {
+                    console.log("setting type", room.type);
                     setSearchParams((prev) => {
                       prev.set("type", room.type);
                       return prev;

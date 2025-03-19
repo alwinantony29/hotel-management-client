@@ -107,6 +107,7 @@ const AddEditRoomModal: React.FC<AddEditRoomModalProps> = ({
               <SelectContent>
                 <SelectItem value="deluxe">Deluxe</SelectItem>
                 <SelectItem value="premium">Premium</SelectItem>
+                <SelectItem value="presidential">Presidential Suite</SelectItem>
                 <SelectItem value="ultra luxury">Ultra Luxury</SelectItem>
               </SelectContent>
             </Select>
