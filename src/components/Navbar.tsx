@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "./ui/button";
 import { useLocation, useNavigate } from "react-router";
-import { CalendarCheck, LogOut } from "lucide-react";
+import { CalendarCheck, LogOut, User } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout } = useUser();
@@ -53,13 +53,13 @@ export default function Navbar() {
             scrolled || !isHomePage ? "text-black" : "text-white"
           )}
         ></h1>
-        <ul className="flex space-x-6">
+        <div className="flex space-x-6">
           {["Home", "About", "Services"].map((item) => (
-            <li key={item}>
+            <div key={item}>
               <a
                 onClick={() => navigateAndScrollIntoView(item)}
                 className={cn(
-                  "text-lg font-medium transition-colors",
+                  "text-lg font-medium transition-colors cursor-pointer",
                   scrolled || !isHomePage
                     ? "text-black hover:text-gray-600"
                     : "text-white hover:text-gray-300"
@@ -67,7 +67,7 @@ export default function Navbar() {
               >
                 {item}
               </a>
-            </li>
+            </div>
           ))}
           <Popover>
             <PopoverTrigger>
@@ -80,13 +80,7 @@ export default function Navbar() {
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               ) : (
-                <Avatar>
-                  <AvatarImage
-                    src="https://github.com/shadcn.png"
-                    alt="@shadcn"
-                  />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
+                <User size={24} />
               )}
             </PopoverTrigger>
             <PopoverContent className="w-40 p-2 relative right-7 top-2">
@@ -130,7 +124,7 @@ export default function Navbar() {
               </ul>
             </PopoverContent>
           </Popover>
-        </ul>
+        </div>
       </div>
     </nav>
   );
