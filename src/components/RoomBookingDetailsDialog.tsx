@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from "./ui/dialog";
 import { BedDouble, CalendarRange, Users } from "lucide-react";
+import { formatDate } from "date-fns";
 
 export default function RoomBookingDetailsDialog({
   selectedBooking,
@@ -112,20 +113,20 @@ export default function RoomBookingDetailsDialog({
               <div>
                 <p className="text-sm font-medium mb-2">Special Requests</p>
                 <p className="text-sm text-muted-foreground">
-                  {/* {selectedBooking?.specialRequests || "None"} */}
+                  {selectedBooking?.requests || "None"}
                 </p>
               </div>
 
-              <div>
+              {/* <div>
                 <p className="text-sm font-medium mb-2">Included Add-ons</p>
                 <ul className="list-disc list-inside text-sm text-muted-foreground">
-                  {/* {selectedBooking?.addons.map(
+                  {selectedBooking?.addons.map(
                     (addon: string, index: number) => (
                       <li key={index}>{addon}</li>
                     )
-                  )} */}
+                  )}
                 </ul>
-              </div>
+              </div> */}
 
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <div>
@@ -133,12 +134,18 @@ export default function RoomBookingDetailsDialog({
                     Payment Method
                   </p>
                   <p className="font-medium">
-                    {selectedBooking?.paymentMethod}
+                    {selectedBooking?.paymentMethod || "Not Paid"}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Booked On</p>
-                  <p className="font-medium">{selectedBooking?.createdAt}</p>
+                  <p className="font-medium">
+                    {selectedBooking?.createdAt &&
+                      formatDate(
+                        new Date(selectedBooking?.createdAt),
+                        "d MMM yyyy"
+                      )}
+                  </p>
                 </div>
               </div>
             </div>

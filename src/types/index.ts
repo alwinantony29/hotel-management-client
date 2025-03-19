@@ -5,7 +5,7 @@ export type User = {
   name: string;
   email: string;
   phoneNo: string;
-  role: UserRole
+  role: UserRole;
 };
 
 export type Room = {
@@ -31,6 +31,7 @@ export type RoomBooking = {
   totalPrice: number;
   paymentMethod?: string;
   createdAt: string;
+  requests: string;
 };
 
 export type PopulatedRoomBooking = Omit<RoomBooking, "roomId"> & {
