@@ -7,7 +7,7 @@ export const useRoomBookingMutation = () => {
     mutationFn: async (
       roomBooking: Omit<
         RoomBooking,
-        "_id" | "userId" | "totalPrice" | "createdAt"
+        "_id" | "userId" | "totalPrice" | "createdAt" | "cabId"
       >
     ) => {
       const res = await api.post("/roombookings", roomBooking);

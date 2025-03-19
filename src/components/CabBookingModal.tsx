@@ -26,15 +26,16 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useCabBookingMutation } from "@/hooks/useCabBookingMutation";
+import { useRoomBookingMutation } from "@/hooks/useRoomBookingMutation";
 
 export default function CabBookingModal({
   close,
   isOpen,
-  roomId,
+  roomBookingId,
 }: {
   isOpen: boolean;
   close: () => void;
-  roomId: string;
+  roomBookingId?: string;
 }) {
   const [pickupDate, setPickupDate] = useState<Date>();
   const [pickupTime, setPickupTime] = useState("");
@@ -43,17 +44,22 @@ export default function CabBookingModal({
   const [specialInstructions, setSpecialInstructions] = useState("");
 
   const { createCabBooking } = useCabBookingMutation();
+  const { updateRoomBookingMutation } = useRoomBookingMutation();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!roomBookingId) return;
     if (!pickupDate) return;
     // TODO: use same state for date & time
-    createCabBooking.mutateAsync({
-      roomId,
+    const res = await createCabBooking.mutateAsync({
       date: pickupDate,
       status: "pending",
       pickUpAddress: pickUpAddress,
       fare: 20,
+    });
+    await updateRoomBookingMutation.mutateAsync({
+      id: roomBookingId,
+      updates: { cabId: res._id },
     });
     close();
   };

@@ -8,7 +8,7 @@ export const useCabBookingMutation = () => {
       createData: Omit<CabBooking, "_id" | "userId" | "driverId">
     ) => {
       const res = await api.post("/cabbookings", createData);
-      return res.data;
+      return res.data as CabBooking;
     },
   });
   return { createCabBooking };

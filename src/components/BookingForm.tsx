@@ -86,6 +86,7 @@ const BookingForm = () => {
       updates: { isPaid: true },
     });
     toast.promise(promise, { loading: "Updating Payment...." });
+    await promise;
     setOpenPayment(false);
     navigate("history");
   };

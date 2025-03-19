@@ -20,17 +20,18 @@ import { useNavigate } from "react-router";
 
 const BookingHistoryPage = () => {
   const navigate = useNavigate();
-  const { data: allBookings } = useRoomBookingQuery();
+  const { data: allBookings } = useRoomBookingQuery({ mine: true });
   const [selectedBooking, setSelectedBooking] =
     useState<PopulatedRoomBooking | null>(null);
-  const [showCabBookingModal, setShowCabBookingModal] = useState(false);
+  const [roomIdForCabBooking, setRoomIdForCabBooking] = useState<string | null>(
+    null
+  );
 
   const today = new Date();
 
-  const currentBookings = allBookings?.filter(
-    (booking) =>
-      today >= new Date(booking.from) && today <= new Date(booking.to)
-  );
+  const currentBookings = allBookings?.filter((booking) => {
+    return today >= new Date(booking.from) || today <= new Date(booking.to);
+  });
 
   const pastBookings = allBookings?.filter(
     (booking) => new Date(booking.to) < today
@@ -88,13 +89,25 @@ const BookingHistoryPage = () => {
                               >
                                 View Details
                               </Button>
-                              <Button
-                                variant="secondary"
-                                size="sm"
-                                onClick={() => setShowCabBookingModal(true)}
-                              >
-                                Book a Cab
-                              </Button>
+                              {booking.cabId ? (
+                                <Button
+                                  className="bg-green-100"
+                                  size="sm"
+                                  variant="outline"
+                                >
+                                  Cab booked
+                                </Button>
+                              ) : (
+                                <Button
+                                  variant="secondary"
+                                  size="sm"
+                                  onClick={() =>
+                                    setRoomIdForCabBooking(booking._id)
+                                  }
+                                >
+                                  Book a Cab
+                                </Button>
+                              )}
                             </div>
                           </TableCell>
                         </TableRow>
@@ -150,8 +163,9 @@ const BookingHistoryPage = () => {
           onClose={() => setSelectedBooking(null)}
         />
         <CabBookingModal
-          isOpen={showCabBookingModal}
-          close={() => setShowCabBookingModal(false)}
+          isOpen={!!roomIdForCabBooking}
+          close={() => setRoomIdForCabBooking(null)}
+          roomBookingId={roomIdForCabBooking || undefined}
         />
       </div>
     </UserLayout>

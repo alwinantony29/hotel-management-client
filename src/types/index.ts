@@ -23,6 +23,7 @@ export type RoomBooking = {
   _id: string;
   userId: string;
   roomId: string;
+  cabId: string;
   totalPeople: number;
   isPaid: boolean;
   status: "confirmed" | "cancelled";
@@ -41,7 +42,6 @@ export type PopulatedRoomBooking = Omit<RoomBooking, "roomId"> & {
 export type CabBooking = {
   _id: string;
   userId: string;
-  roomId: string;
   driverId: string;
   pickUpAddress: string;
   date: Date;

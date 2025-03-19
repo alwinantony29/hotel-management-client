@@ -85,7 +85,6 @@ export const RoomDetails: React.FC = () => {
 
                 <button
                   onClick={() => {
-                    console.log("setting type", room.type);
                     setSearchParams((prev) => {
                       prev.set("type", room.type);
                       return prev;
