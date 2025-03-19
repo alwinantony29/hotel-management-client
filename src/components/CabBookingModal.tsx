@@ -48,7 +48,7 @@ export default function CabBookingModal({
     // TODO: add roomId
     createCabBooking.mutateAsync({
       date: pickupDate,
-      status: "",
+      status: undefined,
       pickUpAddress: "",
       fare: 100,
     });
