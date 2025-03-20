@@ -8,7 +8,7 @@ export const useCabBookingMutation = () => {
   const createCabBooking = useMutation({
     mutationFn: async (createData: Partial<CabBooking>) => {
       const res = await api.post("/cabbookings", createData);
-      return res.data;
+      return res.data as CabBooking;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cabBookings"] });

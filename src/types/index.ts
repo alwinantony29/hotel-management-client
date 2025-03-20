@@ -5,13 +5,13 @@ export type User = {
   name: string;
   email: string;
   phoneNo: string;
-  role: UserRole
+  role: UserRole;
 };
 
 export type Room = {
   _id: string;
   roomNo: string;
-  type: "deluxe" | "premium" | "ultra luxury";
+  type: "deluxe" | "premium" | "presidential" | "ultra luxury";
   capacity: number;
   status: "available" | "cleaning" | "booked";
   images: string[];
@@ -23,6 +23,7 @@ export type RoomBooking = {
   _id: string;
   userId: string;
   roomId: string;
+  cabId: string;
   totalPeople: number;
   isPaid: boolean;
   status: "confirmed" | "cancelled";
@@ -31,6 +32,7 @@ export type RoomBooking = {
   totalPrice: number;
   paymentMethod?: string;
   createdAt: string;
+  requests: string;
 };
 
 export type PopulatedRoomBooking = Omit<RoomBooking, "roomId"> & {

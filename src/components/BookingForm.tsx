@@ -14,30 +14,54 @@ import {
 import { useRoomBookingMutation } from "@/hooks/useRoomBookingMutation";
 import { useRooms } from "@/hooks/useRoomQuery";
 import { Room } from "@/types";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
+import { addDays, isPast, isSameDay, startOfDay } from "date-fns";
+import toast from "react-hot-toast";
+import PaymentDialog from "./PaymentDialog";
 
 const BookingForm = () => {
-  const [checkInDate, setCheckInDate] = useState(new Date());
-  const [checkOutDate, setCheckOutDate] = useState(new Date());
+  const tomorrow = addDays(new Date(), 1);
+  const after3days = addDays(new Date(), 3);
+  const navigate = useNavigate();
+  const [checkInDate, setCheckInDate] = useState(tomorrow);
+  const [checkOutDate, setCheckOutDate] = useState(after3days);
   const [totalPeople, setTotalPeople] = useState(1);
   const [selectedRoom, setSelectedRoom] = useState<Room>();
+  const [requests, setRequests] = useState("");
+  const [openPayment, setOpenPayment] = useState(false);
   const [searchParams] = useSearchParams();
 
-  const { createRoomBookingMutation } = useRoomBookingMutation();
-  const { data: rooms } = useRooms();
+  const { createRoomBookingMutation, updateRoomBookingMutation } =
+    useRoomBookingMutation();
+  const { data: rooms } = useRooms({ status: "available" });
+
+  useEffect(() => {
+    if (!rooms) return;
+    if (!selectedRoom) setSelectedRoom(rooms[0]);
+  }, [rooms, selectedRoom]);
 
   const handleProceedToPayment = async () => {
+    if (isSameDay(checkOutDate, checkInDate)) {
+      toast("Can't checkout on same day");
+      return;
+    }
     if (!selectedRoom) return;
-    await createRoomBookingMutation.mutateAsync({
-      from: checkInDate,
-      to: checkOutDate,
+
+    const createPromise = createRoomBookingMutation.mutateAsync({
+      // check in morning check out morning
+      from: startOfDay(checkInDate),
+      to: startOfDay(checkOutDate),
       roomId: selectedRoom?._id,
       totalPeople,
       isPaid: false,
       status: "confirmed",
+      requests,
     });
-    // navigate to payment gateway or do something else
+    toast.promise(createPromise, { loading: "Booking..." });
+    await createPromise;
+    setOpenPayment(true);
   };
+
   const roomTypes = useMemo(() => {
     if (!rooms) return {};
     const roomTypeData: Record<string, Room> = {};
@@ -54,6 +78,19 @@ const BookingForm = () => {
     setSelectedRoom(roomTypes[typeFromParams]);
   }, [roomTypes, searchParams]);
 
+  const handlePayment = async () => {
+    if (!createRoomBookingMutation.data) return;
+
+    const promise = updateRoomBookingMutation.mutateAsync({
+      id: createRoomBookingMutation.data?._id,
+      updates: { isPaid: true },
+    });
+    toast.promise(promise, { loading: "Updating Payment...." });
+    await promise;
+    setOpenPayment(false);
+    navigate("history");
+  };
+
   return (
     <section className="py-10 px-4 md:px-8" id="book">
       <div className="max-w-2xl mx-auto">
@@ -68,6 +105,10 @@ const BookingForm = () => {
                   selected={checkInDate}
                   onSelect={(v) => (v ? setCheckInDate(v) : {})}
                   className="rounded-md border flex justify-center"
+                  disabled={(d) => {
+                    if (isPast(d)) return true;
+                    return false;
+                  }}
                 />
               </div>
               <div className="flex flex-col gap-2">
@@ -76,7 +117,12 @@ const BookingForm = () => {
                   mode="single"
                   selected={checkOutDate}
                   onSelect={(v) => (v ? setCheckOutDate(v) : {})}
+                  fromDate={tomorrow}
                   className="rounded-md border flex justify-center "
+                  disabled={(d) => {
+                    if (isPast(d)) return true;
+                    return false;
+                  }}
                 />
               </div>
             </div>
@@ -104,7 +150,10 @@ const BookingForm = () => {
               </div>
               <div className="space-y-2">
                 <Label>Number of Guests</Label>
-                <Select onValueChange={(v) => setTotalPeople(+v)}>
+                <Select
+                  onValueChange={(v) => setTotalPeople(+v)}
+                  value={totalPeople + ""}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select guests" />
                   </SelectTrigger>
@@ -120,7 +169,11 @@ const BookingForm = () => {
             </div>
             <div className="mt-6 space-y-2">
               <Label>Special Requests</Label>
-              <Input placeholder="Any special requirements?" />
+              <Input
+                value={requests}
+                onChange={(e) => setRequests(e.target.value)}
+                placeholder="Any special requirements?"
+              />
             </div>
             <Button
               disabled={createRoomBookingMutation.isPending}
@@ -132,6 +185,12 @@ const BookingForm = () => {
           </CardContent>
         </Card>
       </div>
+      <PaymentDialog
+        handlePaid={handlePayment}
+        open={openPayment}
+        setOpen={setOpenPayment}
+        totalPrice={createRoomBookingMutation.data?.totalPrice || 0}
+      />
     </section>
   );
 };

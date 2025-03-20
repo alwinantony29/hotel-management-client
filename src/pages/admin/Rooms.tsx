@@ -15,7 +15,7 @@ import { getRoomStatusColor, getRoomTypeLabel } from "@/lib/utils";
 import AddEditRoomModal from "@/modals/AddEditRoomModal";
 import DeleteRoomModal from "@/modals/DeleteRoomModal";
 import { Room } from "@/types";
-import { Edit, Image, Plus, Trash2 } from "lucide-react";
+import { Edit, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 const RoomsPage = () => {
@@ -64,7 +64,7 @@ const RoomsPage = () => {
                     <TableHead>Type</TableHead>
                     <TableHead>Capacity</TableHead>
                     <TableHead>Status</TableHead>
-                    <TableHead>Images</TableHead>
+                    {/* <TableHead>Images</TableHead> */}
                     <TableHead>Description</TableHead>
                     <TableHead>Price</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -84,12 +84,12 @@ const RoomsPage = () => {
                             room.status.slice(1)}
                         </Badge>
                       </TableCell>
-                      <TableCell>
+                      {/* <TableCell>
                         <div className="flex items-center">
                           <Image size={16} className="mr-1" />
                           <span>{room.images.length}</span>
                         </div>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell>
                         <div className="max-w-[200px] truncate">
                           {room.description.join(", ")}

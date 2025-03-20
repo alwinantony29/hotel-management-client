@@ -5,6 +5,7 @@ import { Hero } from "@/components/Hero";
 import HotelDetails from "@/components/HotelDetails";
 import { Reviews } from "@/components/Reviews";
 import { RoomDetails } from "@/components/RoomDetails";
+import UserLayout from "@/layouts/UserLayout";
 import { useUser } from "@/store/useUser";
 
 export default function Home() {
@@ -12,13 +13,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Hero />
-      <HotelDetails />
-      <RoomDetails />
-      <Gallery />
-      <Reviews />
-      {user && <BookingForm />}
-      <Footer />
+      <UserLayout>
+        <Hero />
+        <HotelDetails />
+        <RoomDetails />
+        <Gallery />
+        <Reviews />
+        {user && <BookingForm />}
+        <Footer />
+      </UserLayout>
     </div>
   );
 }

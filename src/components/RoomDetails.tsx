@@ -1,6 +1,7 @@
 import React from "react";
 import { Users, Maximize2, Wifi } from "lucide-react";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
+import { useUser } from "@/store/useUser";
 
 const rooms = [
   {
@@ -14,12 +15,12 @@ const rooms = [
     description: "Luxurious suite with city views and premium amenities.",
   },
   {
-    name: "Executive Room",
+    name: "Premium Room",
     image:
       "https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
     price: 199,
     capacity: "2 Guests",
-    type: "deluxe",
+    type: "premium",
     size: "35 m²",
     description:
       "Modern comfort with a perfect blend of style and functionality.",
@@ -30,7 +31,7 @@ const rooms = [
       "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
     price: 499,
     capacity: "4 Guests",
-    type: "deluxe",
+    type: "presidential",
     size: "75 m²",
     description: "Ultimate luxury with panoramic views and exclusive services.",
   },
@@ -38,6 +39,8 @@ const rooms = [
 
 export const RoomDetails: React.FC = () => {
   const [, setSearchParams] = useSearchParams();
+  const { user } = useUser();
+  const navigate = useNavigate();
 
   return (
     <section className="py-20 px-4 bg-gray-50" id="services">
@@ -85,15 +88,19 @@ export const RoomDetails: React.FC = () => {
 
                 <button
                   onClick={() => {
-                    setSearchParams((prev) => {
-                      prev.set("type", room.type);
-                      return prev;
-                    });
-                    document.getElementById("book")?.scrollIntoView();
+                    if (user) {
+                      setSearchParams((prev) => {
+                        prev.set("type", room.type);
+                        return prev;
+                      });
+                      document.getElementById("book")?.scrollIntoView();
+                    } else {
+                      navigate("/login");
+                    }
                   }}
                   className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  Book Now
+                  {user ? "Book Now" : "Get started"}
                 </button>
               </div>
             </div>

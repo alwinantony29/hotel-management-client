@@ -26,31 +26,40 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useCabBookingMutation } from "@/hooks/useCabBookingMutation";
+import { useRoomBookingMutation } from "@/hooks/useRoomBookingMutation";
 
 export default function CabBookingModal({
   close,
   isOpen,
+  roomBookingId,
 }: {
   isOpen: boolean;
   close: () => void;
+  roomBookingId?: string;
 }) {
   const [pickupDate, setPickupDate] = useState<Date>();
   const [pickupTime, setPickupTime] = useState("");
+  const [pickUpAddress, setPickUpAddress] = useState("");
   const [passengers, setPassengers] = useState("1");
   const [specialInstructions, setSpecialInstructions] = useState("");
 
   const { createCabBooking } = useCabBookingMutation();
+  const { updateRoomBookingMutation } = useRoomBookingMutation();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!roomBookingId) return;
     if (!pickupDate) return;
     // TODO: use same state for date & time
-    // TODO: add roomId
-    createCabBooking.mutateAsync({
+    const res = await createCabBooking.mutateAsync({
       date: pickupDate,
-      status: undefined,
-      pickUpAddress: "",
-      fare: 100,
+      status: "pending",
+      pickUpAddress: pickUpAddress,
+      fare: 20,
+    });
+    await updateRoomBookingMutation.mutateAsync({
+      id: roomBookingId,
+      updates: { cabId: res._id },
     });
     close();
   };
@@ -137,6 +146,15 @@ export default function CabBookingModal({
             </Select>
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="special-instructions">Pickup Address</Label>
+            <Input
+              id="pickUpAddress"
+              placeholder="ABC Road square junction "
+              value={pickUpAddress}
+              onChange={(e) => setPickUpAddress(e.target.value)}
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="special-instructions">Special Instructions</Label>
             <Input

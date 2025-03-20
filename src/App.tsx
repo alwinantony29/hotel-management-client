@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./App.css";
 import Routes from "./Routes";
 import { UserProvider } from "./store/useUser";
-// import Navbar from "@/components/Navbar";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const pages = import.meta.glob("./pages/**/!(*.test.[jt]sx)*.([jt]sx)", {
@@ -13,7 +13,7 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <UserProvider>
-          {/* <Navbar /> */}
+          <Toaster />
           <Routes pages={pages} />
         </UserProvider>
       </QueryClientProvider>
