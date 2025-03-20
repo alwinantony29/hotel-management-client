@@ -4,33 +4,39 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { api } from "@/lib/axios";
-import { useQueryClient } from "@tanstack/react-query";
 import UserLayout from "@/layouts/UserLayout";
+import { useCustomerMutations } from "@/hooks/useCustomerMutation";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const { loginCustomer } = useCustomerMutations();
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
+  const [form, setForm] = useState({ email: "", password: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await api.post("auth/login", form);
-    if (res?.data?.token) localStorage.setItem("token", res.data.token);
-    await queryClient.invalidateQueries({ queryKey: ["user"] });
-
-    const redirectPath =
-      res.data.user.role === "customer" ? "" : res.data.user.role;
-
-    navigate(`/${redirectPath}`);
+    loginCustomer.mutate(form, {
+      onSuccess: (data) => {
+        const redirectPath =
+          data.user.role === "customer" ? "" : data.user.role;
+        navigate(`/${redirectPath}`);
+      },
+      onError: (error: unknown) => {
+        if (error instanceof AxiosError) {
+          const errorMessage =
+            error.response?.data?.message || "Login failed. Please try again.";
+          toast.error(errorMessage);
+        } else {
+          toast.error("An unexpected error occurred.");
+        }
+      },
+    });
   };
 
   return (
@@ -66,8 +72,12 @@ const Login = () => {
                   onChange={handleChange}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Login
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={loginCustomer.isPending}
+              >
+                {loginCustomer.isPending ? "Logging in..." : "Login"}
               </Button>
             </form>
             <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">

@@ -1,28 +1,40 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { api } from "@/lib/axios";
 import UserLayout from "@/layouts/UserLayout";
+import { toast } from "react-hot-toast";
+import { useCustomerMutations } from "@/hooks/useCustomerMutation";
+import { AxiosError } from "axios";
 
 const Signup = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const navigate = useNavigate();
+  const { createCustomer } = useCustomerMutations();
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await api.post("/auth/signup", form);
-    console.log("🚀 ~ handleSubmit ~ res:", res.data);
-    if (res?.data?.token) localStorage.setItem("token", res.data.token);
+    createCustomer.mutate(form, {
+      onSuccess: () => {
+        toast.success("Account created successfully! Redirecting to home...");
+        setTimeout(() => navigate("/"), 2000);
+      },
+      onError: (error: unknown) => {
+        if (error instanceof AxiosError) {
+          const errorMessage =
+            error.response?.data?.message || "Login failed. Please try again.";
+          toast.error(errorMessage);
+        } else {
+          toast.error("An unexpected error occurred.");
+        }
+      },
+    });
   };
 
   return (
@@ -39,7 +51,7 @@ const Signup = () => {
                 <Input
                   id="name"
                   name="name"
-                  type="name"
+                  type="text"
                   placeholder="Enter your name"
                   required
                   value={form.name}
@@ -70,8 +82,12 @@ const Signup = () => {
                   onChange={handleChange}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Sign Up
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={createCustomer.isPending}
+              >
+                {createCustomer.isPending ? "Signing up..." : "Sign Up"}
               </Button>
             </form>
             <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
