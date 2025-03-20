@@ -1,13 +1,11 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import UserLayout from "@/layouts/UserLayout";
-import { toast } from "react-hot-toast";
 import { useCustomerMutations } from "@/hooks/useCustomerMutation";
-import { AxiosError } from "axios";
+import UserLayout from "@/layouts/UserLayout";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -22,18 +20,8 @@ const Signup = () => {
     e.preventDefault();
     createCustomer.mutate(form, {
       onSuccess: () => {
-        toast.success("Account created successfully! Redirecting to home...");
         setTimeout(() => navigate("/"), 2000);
-      },
-      onError: (error: unknown) => {
-        if (error instanceof AxiosError) {
-          const errorMessage =
-            error.response?.data?.message || "Login failed. Please try again.";
-          toast.error(errorMessage);
-        } else {
-          toast.error("An unexpected error occurred.");
-        }
-      },
+      }
     });
   };
 

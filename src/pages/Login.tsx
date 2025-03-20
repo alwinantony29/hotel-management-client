@@ -1,13 +1,11 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import UserLayout from "@/layouts/UserLayout";
 import { useCustomerMutations } from "@/hooks/useCustomerMutation";
-import toast from "react-hot-toast";
-import { AxiosError } from "axios";
+import UserLayout from "@/layouts/UserLayout";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,16 +23,7 @@ const Login = () => {
       onSuccess: (data) => {
         const redirectPath =
           data.user.role === "customer" ? "" : data.user.role;
-        navigate(`/${redirectPath}`);
-      },
-      onError: (error: unknown) => {
-        if (error instanceof AxiosError) {
-          const errorMessage =
-            error.response?.data?.message || "Login failed. Please try again.";
-          toast.error(errorMessage);
-        } else {
-          toast.error("An unexpected error occurred.");
-        }
+        setTimeout(() => navigate(`/${redirectPath}`), 2000);
       },
     });
   };
