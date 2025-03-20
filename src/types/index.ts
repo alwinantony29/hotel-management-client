@@ -41,10 +41,10 @@ export type PopulatedRoomBooking = Omit<RoomBooking, "roomId"> & {
 
 export type CabBooking = {
   _id: string;
-  userId: string;
-  driverId: string;
+  userId?: User;
+  driverId?: string;
   pickUpAddress: string;
   date: Date;
-  status: string;
+  status: "pending" | "accepted" | "fulfilled";
   fare: number;
 };

@@ -35,3 +35,8 @@ export const getRoomStatusColor = (status: string) => {
 export const getAccessToken = () => localStorage.getItem("token");
 export const isAuthenticated = () => !!getAccessToken();
 
+export const formatDate = (isoString : Date) => {
+  const date = new Date(isoString);
+  return date.toLocaleDateString("en-GB"); // "en-GB" gives "dd/mm/yyyy"
+};
+

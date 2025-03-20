@@ -4,17 +4,17 @@ import { isAuthenticated } from "@/lib/utils";
 import { useNavigate } from "react-router";
 import { useUser } from "@/store/useUser";
 
-interface AdminLayoutProps {
+interface DriverLayoutProps {
   children: ReactNode;
 }
 
-const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
+const DriverLayout: React.FC<DriverLayoutProps> = ({ children }) => {
   const { user, isLoading } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isLoading) return; // Wait for user data to load
-    if (!isAuthenticated() || !user || user.role !== "admin") {
+    if (isLoading) return;
+    if (!isAuthenticated() || !user || user.role !== "driver") {
       navigate("/login");
     }
   }, [navigate, user, isLoading]);
@@ -23,10 +23,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
   return (
     <>
-      <AdminNavbar title="Admin" />
+      <AdminNavbar title="Driver" />
       {children}
     </>
   );
 };
 
-export default AdminLayout;
+export default DriverLayout;
