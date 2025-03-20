@@ -1,28 +1,28 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { api } from "@/lib/axios";
+import { useCustomerMutations } from "@/hooks/useCustomerMutation";
 import UserLayout from "@/layouts/UserLayout";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const navigate = useNavigate();
+  const { createCustomer } = useCustomerMutations();
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await api.post("/auth/signup", form);
-    console.log("🚀 ~ handleSubmit ~ res:", res.data);
-    if (res?.data?.token) localStorage.setItem("token", res.data.token);
+    createCustomer.mutate(form, {
+      onSuccess: () => {
+        setTimeout(() => navigate("/"), 2000);
+      }
+    });
   };
 
   return (
@@ -39,7 +39,7 @@ const Signup = () => {
                 <Input
                   id="name"
                   name="name"
-                  type="name"
+                  type="text"
                   placeholder="Enter your name"
                   required
                   value={form.name}
@@ -70,8 +70,12 @@ const Signup = () => {
                   onChange={handleChange}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Sign Up
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={createCustomer.isPending}
+              >
+                {createCustomer.isPending ? "Signing up..." : "Sign Up"}
               </Button>
             </form>
             <p className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
