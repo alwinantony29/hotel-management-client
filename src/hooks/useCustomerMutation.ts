@@ -11,9 +11,9 @@ export const useCustomerMutations = () => {
       const res = await api.post("/auth/login", loginData);
       return res.data;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       localStorage.setItem("token", data.token);
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
       toast.success("login success! Redirecting...");
     },
     onError: (error) => {
