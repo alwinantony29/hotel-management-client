@@ -63,6 +63,12 @@ const AdminNavbar = ({ title }: { title: string }) => {
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
                 <button
                   className="cursor-pointer block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                  onClick={() => navigate('/change-password')}
+                >
+                  change password
+                </button>
+                <button
+                  className="cursor-pointer block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
                   onClick={() => logout()}
                 >
                   Logout
