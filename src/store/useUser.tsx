@@ -1,13 +1,21 @@
 import { createContext, useContext } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../lib/axios";
 import { User } from "@/types";
 import { useNavigate } from "react-router";
+import { AxiosError } from "axios";
+import toast from "react-hot-toast";
 
 interface UserContextType {
   user?: User;
   logout: () => void;
   isLoading: boolean;
+  changePassword: (data: ChangePasswordInput) => Promise<void>;
+}
+
+interface ChangePasswordInput {
+  currentPassword: string;
+  newPassword: string;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
@@ -28,15 +36,34 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     },
     retry: false,
   });
+
   const logout = async () => {
+    console.log('logout');    
     localStorage.clear();
     await queryClient.invalidateQueries({ queryKey: ["user"] });
     navigate("/");
   };
 
+  const { mutateAsync: changePassword } = useMutation({
+    mutationFn: async (formData: ChangePasswordInput) => {
+      const res = await api.patch("/users/change-password", formData);
+      return res.data;
+    },
+    onSuccess: () => {
+      toast.success("Password changed successfully!");
+      const redirectPath = user?.role === "customer" ? "" : user?.role;
+      setTimeout(() => navigate(`/${redirectPath}`), 2000);
+    },
+    onError: (error: AxiosError<{ error?: string }>) => {
+      const errorMessage =
+        error.response?.data?.error || "Failed to change password";
+      toast.error(errorMessage);
+    },
+  });
+
   return (
     <UserContext.Provider
-      value={{ user: user || undefined, logout, isLoading }}
+      value={{ user: user || undefined, logout, isLoading, changePassword }}
     >
       {children}
     </UserContext.Provider>

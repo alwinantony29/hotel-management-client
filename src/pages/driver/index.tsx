@@ -7,9 +7,6 @@ import DriverLayout from "@/layouts/DriverLayout";
 const Driver = () => {
   const { data: bookings = [], isLoading, isError } = useCabBookings();
 
-  if (isLoading) return <p>Loading bookings...</p>;
-  if (isError) return <p>Error fetching bookings.</p>;
-
   return (
     <DriverLayout>
       <div className="p-6">
@@ -21,15 +18,23 @@ const Driver = () => {
           </TabsList>
           <Card>
             <CardContent className="p-4">
-              <TabsContent value="pending">
-                <DriverBookingTable status="pending" bookings={bookings} />
-              </TabsContent>
-              <TabsContent value="active">
-                <DriverBookingTable status="active" bookings={bookings} />
-              </TabsContent>
-              <TabsContent value="passive">
-                <DriverBookingTable status="passive" bookings={bookings} />
-              </TabsContent>
+              {isLoading ? (
+                <p>Loading bookings...</p>
+              ) : isError ? (
+                <p className="text-red-500">Error fetching bookings.</p>
+              ) : (
+                <>
+                  <TabsContent value="pending">
+                    <DriverBookingTable status="pending" bookings={bookings} />
+                  </TabsContent>
+                  <TabsContent value="active">
+                    <DriverBookingTable status="active" bookings={bookings} />
+                  </TabsContent>
+                  <TabsContent value="passive">
+                    <DriverBookingTable status="passive" bookings={bookings} />
+                  </TabsContent>
+                </>
+              )}
             </CardContent>
           </Card>
         </Tabs>
