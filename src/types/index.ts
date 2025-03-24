@@ -21,7 +21,7 @@ export type Room = {
 
 export type RoomBooking = {
   _id: string;
-  userId: string;
+  userId: User;
   roomId: string;
   cabId: string;
   totalPeople: number;
