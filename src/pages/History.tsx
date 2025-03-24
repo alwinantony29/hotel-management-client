@@ -79,7 +79,7 @@ const BookingHistoryPage = () => {
                               {booking.status}
                             </span>
                           </TableCell>
-                          <TableCell>${booking.totalPrice}</TableCell>
+                          <TableCell>₹{booking.totalPrice}</TableCell>
                           <TableCell>
                             <div className="flex gap-5">
                               <Button
@@ -139,7 +139,7 @@ const BookingHistoryPage = () => {
                               {booking.status}
                             </span>
                           </TableCell>
-                          <TableCell>${booking.totalPrice}</TableCell>
+                          <TableCell>₹{booking.totalPrice}</TableCell>
                           <TableCell>
                             <Button
                               onClick={() => setSelectedBooking(booking)}

@@ -55,7 +55,7 @@ export const DriverBookingTable = ({
           <TableRow key={booking._id}>
             <TableCell>{booking.userId?.name || "N/A"}</TableCell>
             <TableCell>{booking.pickUpAddress}</TableCell>
-            <TableCell>${booking.fare}</TableCell>
+            <TableCell>₹{booking.fare}</TableCell>
             <TableCell>{formatDate(booking.date)}</TableCell>
             {status === "pending" && (
               <TableCell>

@@ -95,7 +95,7 @@ const RoomsPage = () => {
                           {room.description.join(", ")}
                         </div>
                       </TableCell>
-                      <TableCell>${room.price}/night</TableCell>
+                      <TableCell>₹{room.price}/night</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Button
