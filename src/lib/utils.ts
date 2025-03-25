@@ -31,12 +31,18 @@ export const getRoomStatusColor = (status: string) => {
   }
 };
 
+export const generateRandomPassword = (length = 12) => {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+  return Array.from({ length }, () =>
+    chars.charAt(Math.floor(Math.random() * chars.length))
+  ).join("");
+};
 
 export const getAccessToken = () => localStorage.getItem("token");
 export const isAuthenticated = () => !!getAccessToken();
 
-export const formatDate = (isoString : Date) => {
+export const formatDate = (isoString: Date) => {
   const date = new Date(isoString);
   return date.toLocaleDateString("en-GB"); // "en-GB" gives "dd/mm/yyyy"
 };
-

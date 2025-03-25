@@ -29,7 +29,6 @@ const RoomBookingHistoryTable: React.FC<RoomBookingHistoryTableProps> = ({
   const { user } = useUser();
   const role = user?.role;
   console.log(currentBookings);
-  
 
   return (
     <div>

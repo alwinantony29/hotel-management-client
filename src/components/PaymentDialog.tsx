@@ -28,7 +28,7 @@ const PaymentDialog = ({
             </DialogTitle>
           </DialogHeader>
           <div className="text-center text-xl font-bold py-4">
-          ₹{totalPrice.toFixed(2)}
+            ₹{totalPrice.toFixed(2)}
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>

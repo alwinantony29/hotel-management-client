@@ -26,7 +26,6 @@ const AddEditDriverModal: React.FC<AddEditDriverModalProps> = ({
 }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
 
   useEffect(() => {
@@ -46,15 +45,17 @@ const AddEditDriverModal: React.FC<AddEditDriverModalProps> = ({
   const newDriverData = {
     name,
     email,
-    password,
     phoneNo,
-    role: "driver" as UserRole
+    role: "driver" as UserRole,
   };
 
   const handleSubmit = async () => {
     try {
       if (driverData) {
-        await editDriverMutation.mutateAsync({ _id: driverData._id, ...newDriverData });
+        await editDriverMutation.mutateAsync({
+          _id: driverData._id,
+          ...newDriverData,
+        });
       } else {
         await addDriverMutation.mutateAsync(newDriverData);
       }
@@ -67,7 +68,7 @@ const AddEditDriverModal: React.FC<AddEditDriverModalProps> = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="w-full max-w-lg h-[60vh] flex flex-col">
-      <DialogDescription></DialogDescription>
+        <DialogDescription></DialogDescription>
         <DialogHeader>
           <DialogTitle>{driverData ? "Edit" : "Add"} Driver</DialogTitle>
         </DialogHeader>
@@ -81,20 +82,26 @@ const AddEditDriverModal: React.FC<AddEditDriverModalProps> = ({
             <Input value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div>
-            <Label className="my-1 block">Password</Label>
-            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          <div>
             <Label className="my-1 block">Phone Number</Label>
-            <Input value={phoneNo} onChange={(e) => setPhoneNo(e.target.value)} />
+            <Input
+              value={phoneNo}
+              onChange={(e) => setPhoneNo(e.target.value)}
+            />
           </div>
         </div>
         <DialogFooter className="border-t p-4 flex justify-end space-x-2">
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit} disabled={addDriverMutation.isPending || editDriverMutation.isPending}>
-            {(addDriverMutation.isPending || editDriverMutation.isPending) ? "Saving..." : "Save"}
+          <Button
+            onClick={handleSubmit}
+            disabled={
+              addDriverMutation.isPending || editDriverMutation.isPending
+            }
+          >
+            {addDriverMutation.isPending || editDriverMutation.isPending
+              ? "Saving..."
+              : "Save"}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -1,7 +1,7 @@
 import RoomBookingDetailsDialog from "@/components/RoomBookingDetailsDialog";
 import RoomBookingHistoryTable from "@/components/RoomBookingHistoryTable";
 import { useRoomBookingQuery } from "@/hooks/useRoomBookingQuery";
-import UserLayout from "@/layouts/UserLayout";
+import AdminLayout from "@/layouts/AdminLayout";
 import { PopulatedRoomBooking } from "@/types";
 import { useState } from "react";
 
@@ -9,9 +9,7 @@ const BookingsPage = () => {
   const { data: allBookings } = useRoomBookingQuery();
   const [selectedBooking, setSelectedBooking] =
     useState<PopulatedRoomBooking | null>(null);
-  const [, setRoomIdForCabBooking] = useState<string | null>(
-    null
-  );
+  const [, setRoomIdForCabBooking] = useState<string | null>(null);
 
   const today = new Date();
 
@@ -24,7 +22,7 @@ const BookingsPage = () => {
   );
 
   return (
-    <UserLayout>
+    <AdminLayout>
       <div className="min-h-screen bg-background py-30 px-4 md:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-8">
@@ -42,7 +40,7 @@ const BookingsPage = () => {
           onClose={() => setSelectedBooking(null)}
         />
       </div>
-    </UserLayout>
+    </AdminLayout>
   );
 };
 

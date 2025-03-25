@@ -103,7 +103,7 @@ export default function RoomBookingDetailsDialog({
                   Total Price
                 </p>
                 <p className="text-xl font-bold">
-                ₹{selectedBooking?.totalPrice}
+                  ₹{selectedBooking?.totalPrice}
                 </p>
               </div>
             </div>
