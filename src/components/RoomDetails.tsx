@@ -64,9 +64,9 @@ export const RoomDetails: React.FC = () => {
               <div className="p-6">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-xl font-semibold">{room.name}</h3>
-                  <span className="text-2xl font-bold text-blue-600">
+                  {/* <span className="text-2xl font-bold text-blue-600">
                     ₹{room.price}
-                  </span>
+                  </span> */}
                 </div>
 
                 <p className="text-gray-600 mb-4">{room.description}</p>
