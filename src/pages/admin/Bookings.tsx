@@ -1,81 +1,48 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import RoomBookingDetailsDialog from "@/components/RoomBookingDetailsDialog";
+import RoomBookingHistoryTable from "@/components/RoomBookingHistoryTable";
 import { useRoomBookingQuery } from "@/hooks/useRoomBookingQuery";
-import AdminLayout from "@/layouts/AdminLayout";
+import UserLayout from "@/layouts/UserLayout";
+import { PopulatedRoomBooking } from "@/types";
+import { useState } from "react";
 
 const BookingsPage = () => {
-  const { data: bookings = [], isLoading, isError } = useRoomBookingQuery();
+  const { data: allBookings } = useRoomBookingQuery();
+  const [selectedBooking, setSelectedBooking] =
+    useState<PopulatedRoomBooking | null>(null);
+  const [, setRoomIdForCabBooking] = useState<string | null>(
+    null
+  );
+
+  const today = new Date();
+
+  const currentBookings = allBookings?.filter((booking) => {
+    return today >= new Date(booking.from) || today <= new Date(booking.to);
+  });
+
+  const pastBookings = allBookings?.filter(
+    (booking) => new Date(booking.to) < today
+  );
 
   return (
-    <AdminLayout>
-      <div className="p-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-2xl font-bold">Room Bookings</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <p>Loading bookings...</p>
-            ) : isError ? (
-              <p className="text-red-500">Failed to load bookings.</p>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Room</TableHead>
-                    <TableHead>People</TableHead>
-                    <TableHead>Total Price</TableHead>
-                    <TableHead>Payment</TableHead>
-                    <TableHead>Check-in</TableHead>
-                    <TableHead>Check-out</TableHead>
-                    <TableHead>Status</TableHead>
-                    {/* <TableHead className="text-right">Actions</TableHead> */}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {bookings.map((booking) => (
-                    <TableRow key={booking._id}>
-                      <TableCell className="font-medium">
-                        {booking.userId?.name}
-                      </TableCell>
-                      <TableCell>{booking.roomId?.roomNo}</TableCell>
-                      <TableCell>{booking.totalPeople}</TableCell>
-                      <TableCell>${booking.totalPrice}</TableCell>
-                      <TableCell>
-                        {booking.isPaid ? "Paid" : "Pending"}
-                      </TableCell>
-                      <TableCell>
-                        {new Date(booking.from).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        {new Date(booking.to).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell
-                        className={
-                          booking.status === "confirmed"
-                            ? "text-green-500"
-                            : "text-red-500"
-                        }
-                      >
-                        {booking.status}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
-        </Card>
+    <UserLayout>
+      <div className="min-h-screen bg-background py-30 px-4 md:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-bold">All Bookings</h1>
+          </div>
+          <RoomBookingHistoryTable
+            pastBookings={pastBookings}
+            currentBookings={currentBookings}
+            setSelectedBooking={setSelectedBooking}
+            setRoomIdForCabBooking={setRoomIdForCabBooking}
+          />
+        </div>
+        <RoomBookingDetailsDialog
+          selectedBooking={selectedBooking}
+          onClose={() => setSelectedBooking(null)}
+        />
       </div>
-    </AdminLayout>
+    </UserLayout>
   );
 };
 
