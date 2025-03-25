@@ -23,7 +23,7 @@ const Login = () => {
       onSuccess: (data) => {
         const redirectPath =
           data.user.role === "customer" ? "" : data.user.role;
-        setTimeout(() => navigate(`/${redirectPath}`), 2000);
+        setTimeout(() => navigate(`/${redirectPath}`), 500);
       },
     });
   };

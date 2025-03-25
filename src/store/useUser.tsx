@@ -52,7 +52,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     onSuccess: () => {
       toast.success("Password changed successfully!");
       const redirectPath = user?.role === "customer" ? "" : user?.role;
-      setTimeout(() => navigate(`/${redirectPath}`), 2000);
+      setTimeout(() => navigate(`/${redirectPath}`), 500);
     },
     onError: (error: AxiosError<{ error?: string }>) => {
       const errorMessage =

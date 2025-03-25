@@ -20,7 +20,7 @@ const Signup = () => {
     e.preventDefault();
     createCustomer.mutate(form, {
       onSuccess: () => {
-        setTimeout(() => navigate("/"), 2000);
+        setTimeout(() => navigate("/"), 500);
       }
     });
   };
