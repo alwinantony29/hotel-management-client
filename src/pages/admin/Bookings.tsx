@@ -14,7 +14,7 @@ const BookingsPage = () => {
   const today = new Date();
 
   const currentBookings = allBookings?.filter((booking) => {
-    return today >= new Date(booking.from) || today <= new Date(booking.to);
+    return today <= new Date(booking.to);
   });
 
   const pastBookings = allBookings?.filter(
