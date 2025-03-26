@@ -14,7 +14,7 @@ export const useCustomerMutations = () => {
     onSuccess: async (data) => {
       localStorage.setItem("token", data.token);
       await queryClient.invalidateQueries({ queryKey: ["user"] });
-      toast.success("login success! Redirecting...");
+      toast.success("Welcome back!");
     },
     onError: (error) => {
       console.error("Login failed:", error);
@@ -40,7 +40,7 @@ export const useCustomerMutations = () => {
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      toast.success("Account created successfully! Redirecting to home...");
+      toast.success("Account created successfully");
     },
     onError: (error) => {
       console.error("Signup failed:", error);

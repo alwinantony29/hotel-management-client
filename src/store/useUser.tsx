@@ -38,7 +38,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const logout = async () => {
-    console.log('logout');    
+    console.log("logout");
     localStorage.clear();
     await queryClient.invalidateQueries({ queryKey: ["user"] });
     navigate("/");
@@ -50,7 +50,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       return res.data;
     },
     onSuccess: () => {
-      toast.success("Password changed successfully!");
+      toast.success("Password changed!");
       const redirectPath = user?.role === "customer" ? "" : user?.role;
       setTimeout(() => navigate(`/${redirectPath}`), 500);
     },
