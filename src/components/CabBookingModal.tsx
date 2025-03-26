@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/popover";
 import { useCabBookingMutation } from "@/hooks/useCabBookingMutation";
 import { useRoomBookingMutation } from "@/hooks/useRoomBookingMutation";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CabBookingModal({
   close,
@@ -37,6 +38,7 @@ export default function CabBookingModal({
   close: () => void;
   roomBookingId?: string;
 }) {
+  const queryClient = useQueryClient();
   const [pickupDate, setPickupDate] = useState<Date>();
   const [pickupTime, setPickupTime] = useState("");
   const [pickUpAddress, setPickUpAddress] = useState("");
@@ -51,6 +53,7 @@ export default function CabBookingModal({
     if (!roomBookingId) return;
     if (!pickupDate) return;
     // TODO: use same state for date & time
+
     const res = await createCabBooking.mutateAsync({
       date: pickupDate,
       status: "pending",
@@ -61,6 +64,7 @@ export default function CabBookingModal({
       id: roomBookingId,
       updates: { cabId: res._id },
     });
+    await queryClient.invalidateQueries({ queryKey: ["bookings", "rooms"] });
     close();
   };
 
