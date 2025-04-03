@@ -8,7 +8,7 @@ const rooms = [
     name: "Deluxe Suite",
     image:
       "https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-    price: 2999,
+    price: 1999,
     capacity: "2-3 Guests",
     type: "deluxe",
     size: "45 m²",
@@ -18,7 +18,7 @@ const rooms = [
     name: "Premium Room",
     image:
       "https://images.unsplash.com/photo-1566665797739-1674de7a421a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
-    price: 1999,
+    price: 2999,
     capacity: "2 Guests",
     type: "premium",
     size: "35 m²",
@@ -64,9 +64,9 @@ export const RoomDetails: React.FC = () => {
               <div className="p-6">
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-xl font-semibold">{room.name}</h3>
-                  {/* <span className="text-2xl font-bold text-blue-600">
+                  <span className="text-xl font-bold text-blue-600">
                     ₹{room.price}
-                  </span> */}
+                  </span>
                 </div>
 
                 <p className="text-gray-600 mb-4">{room.description}</p>
