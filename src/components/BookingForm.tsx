@@ -85,10 +85,12 @@ const BookingForm = () => {
       id: createRoomBookingMutation.data?._id,
       updates: { isPaid: true },
     });
-    toast.promise(promise, { loading: "Updating Payment...." });
+    toast.promise(promise, { loading: "Payment successful" });
     await promise;
-    setOpenPayment(false);
-    navigate("history");
+    setTimeout(() => {
+      setOpenPayment(false);
+      navigate("history");
+    }, 1000);
   };
 
   return (
