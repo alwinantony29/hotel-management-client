@@ -160,11 +160,14 @@ const BookingForm = () => {
                     <SelectValue placeholder="Select guests" />
                   </SelectTrigger>
                   <SelectContent>
-                    {[...Array(selectedRoom?.capacity).keys()].map((num) => (
-                      <SelectItem key={num} value={num.toString()}>
-                        {num} {num === 1 ? "Guest" : "Guests"}
-                      </SelectItem>
-                    ))}
+                    {[...Array(selectedRoom?.capacity).keys()]
+                      // slice out 0
+                      .slice(1)
+                      .map((num) => (
+                        <SelectItem key={num} value={num.toString()}>
+                          {num} {num === 1 ? "Guest" : "Guests"}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
